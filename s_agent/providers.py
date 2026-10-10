@@ -29,7 +29,7 @@ def chat_openai_compat(cfg: SConfig, messages: list, timeout: int = 60) -> str:
     except Exception:
         return json.dumps(d, ensure_ascii=False)[:2000]
 
-# ---------- Local engine: instant planning with no network (bilingual EN/AR) ----------
+# ---------- Local engine: instant planning with no network (multilingual EN/AR/FR/ES) ----------
 import os, re
 def local_plan(task: str, cwd: str) -> list:
     """Turn a task directly into tool steps (fast, no LLM). Accepts English and Arabic."""
@@ -37,25 +37,25 @@ def local_plan(task: str, cwd: str) -> list:
     steps = []
     # Real browser: open/browse/screenshot/fill forms (Playwright + Firefox)
     m_url = re.search(r"https?://[^\s\"'<>]+", t)
-    if re.search(r"browser|firefox|playwright|open https?://|open (the |this )?(site|link|page|url)|screenshot.*(page|site|browser)|متصفح|فايرفوكس|افتح (الموقع|الرابط|صفحة)|لقطة.*(متصفح|موقع|صفحة)", t, re.I):
+    if re.search(r"browser|firefox|playwright|open https?://|ouvrir https?://|abrir https?://|open (the |this )?(site|link|page|url)|screenshot.*(page|site|browser)|ouvrir|naviguer|navegador|abrir|متصفح|فايرفوكس|افتح (الموقع|الرابط|صفحة)|لقطة.*(متصفح|موقع|صفحة)", t, re.I):
         if m_url:
             u = m_url.group(0)
             steps.append({"tool": "browser", "args": {"action": "open", "url": u}})
             steps.append({"tool": "browser", "args": {"action": "text"}})
-            if re.search(r"screenshot|لقطة|صورة", t, re.I):
+            if re.search(r"screenshot|capture|لقطة|صورة", t, re.I):
                 steps.append({"tool": "browser", "args": {"action": "screenshot"}})
             return steps
         steps.append({"tool": "browser", "args": {"action": "status"}})
         return steps
     # Desktop: calculator/click/type/screen capture (PyAutoGUI)
-    if re.search(r"desktop|screen|calculator|pyautogui|click|move (the )?mouse|screen ?shot|capture|سطح المكتب|الشاشة|الحاسبة|انقر|حرّك الفأرة|لقطة شاشة", t, re.I):
+    if re.search(r"desktop|screen|calculator|calculatrice|calculadora|pyautogui|click|cliquer|haz clic|move (the )?mouse|déplacer|capture|screen ?shot|bureau|écran|escritorio|pantalla|سطح المكتب|الشاشة|الحاسبة|انقر|حرّك الفأرة|لقطة شاشة", t, re.I):
         if re.search(r"shot|capture|لقطة", t, re.I):
             return [{"tool": "desktop", "args": {"action": "screenshot"}}]
         return [{"tool": "desktop", "args": {"action": "status"}}]
-    if re.search(r"contents|folder|directory|show|list files|\bls\b|محتويات|مجلد|مجلّد|اعرض", t, re.I):
+    if re.search(r"contents|folder|directory|show|list files|lister|contenu|dossier|afficher|listar|mostrar|contenido|carpeta|\bls\b|محتويات|مجلد|مجلّد|اعرض", t, re.I):
         return [{"tool": "ls", "args": {"path": cwd}}]
-    m = re.search(r"(?:read|explain|show|open)\s*[ :]*([^\n]+)?", t, re.I)
-    if re.search(r"explain|structure|entry|architect|مكوّن|هيكل|اشرح", t, re.I):
+    m = re.search(r"(?:read|explain|show|open|lire|expliquer|afficher|ouvrir|leer|explicar|mostrar|abrir)\s*[ :]*([^\n]+)?", t, re.I)
+    if re.search(r"explain|structure|entry|architect|expliquer|explicar|estructura|مكوّن|هيكل|اشرح", t, re.I):
         steps += [
             {"tool": "ls", "args": {"path": cwd}},
             {"tool": "grep", "args": {"pattern": "def main|if __name__|class .*Agent|function main", "path": cwd}},
@@ -67,15 +67,15 @@ def local_plan(task: str, cwd: str) -> list:
         if os.path.exists(cand):
             return [{"tool": "read", "args": {"path": cand}}]
         return [{"tool": "grep", "args": {"pattern": re.escape(target[:40]), "path": cwd}}]
-    if re.search(r"\bsearch\b|grep|find|trace|locate|ابحث|أين", t, re.I):
-        kw = re.sub(r"(search|grep|find|trace|locate|for|ابحث|عن|في)\s*", " ", t, flags=re.I).strip()[:60] or "TODO"
+    if re.search(r"\bsearch\b|grep|find|trace|locate|chercher|rechercher|buscar|rastrear|où|dónde|ابحث|أين", t, re.I):
+        kw = re.sub(r"(search|grep|find|trace|locate|for|chercher|rechercher|buscar|rastrear|où|dónde|ابحث|عن|في)\s*", " ", t, flags=re.I).strip()[:60] or "TODO"
         return [{"tool": "grep", "args": {"pattern": kw, "path": cwd}}]
-    if re.search(r"\btest\b|verify|check|run\b|اختبار|تحقق", t, re.I):
+    if re.search(r"\btest\b|verify|check|run\b|tester|vérifier|exécuter|probar|verificar|ejecutar|اختبار|تحقق", t, re.I):
         return [
             {"tool": "ls", "args": {"path": cwd}},
             {"tool": "bash", "args": {"cmd": "python -m pytest -q 2>&1 | head -50" if os.path.exists(os.path.join(cwd,"tests")) else "python --version && dir" if os.name=="nt" else "python3 --version && ls"}},
         ]
-    if re.search(r"create|write|new file|أنشئ|اكتب|ملف", t, re.I):
+    if re.search(r"create|write|new file|créer|écrire|fichier|crear|escribir|archivo|أنشئ|اكتب|ملف", t, re.I):
         steps.append({"tool": "ls", "args": {"path": cwd}})
         return steps
     # Default: quick exploration

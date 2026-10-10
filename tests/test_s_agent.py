@@ -28,8 +28,11 @@ def test_browser_desktop_registered_and_safe():
     assert b and b[0]["tool"] == "browser" and b[0]["args"].get("url") == "https://example.com"
     d = local_plan("take a desktop screenshot", ".")
     assert d and d[0]["tool"] == "desktop"
-    # Bilingual: Arabic tasks still route correctly
+    # Multilingual input: AR/FR/ES tasks route just like English ones
     assert local_plan("افتح المتصفح https://example.com ولخصه", ".")[0]["tool"] == "browser"
+    assert local_plan("ouvrir https://example.com dans le navigateur", ".")[0]["tool"] == "browser"
+    assert local_plan("lister le contenu du dossier", ".")[0]["tool"] == "ls"
+    assert local_plan("muestra el contenido de la carpeta", ".")[0]["tool"] == "ls"
     # status always works (ready or install hint — never crashes)
     rb = tools.run_tool("browser", {"action": "status"})
     assert set(("ok", "summary")) <= set(rb)

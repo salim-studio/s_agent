@@ -27,7 +27,7 @@
 - **Zero required dependencies** — the core is pure stdlib, installs instantly, ~20 MB RAM.
 - **Parallel by design** — independent tool batches run together, not one by one.
 - **Offline-ready local engine** — works with no API key and no internet (instant heuristic planner); plug in any LLM when you want to.
-- **Bilingual** — understands English and Arabic tasks.
+- **Multilingual** — English, Arabic, French, and Spanish, for input and output.
 - **Real browser + real desktop** — Playwright (Firefox-first) and PyAutoGUI as optional add-ons.
 - **Safe by default** — blocked destructive paths/commands, confirmation prompts, desktop FAILSAFE.
 
