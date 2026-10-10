@@ -1,0 +1,8 @@
+# s_agent — الأساس stdlib فقط (يعمل بدون شيء)
+# إضافات اختيارية للتحكم الحقيقي:
+#   pip install -r requirements.txt        — كل شيء
+#   pip install playwright && python -m playwright install firefox   — المتصفح فقط
+#   pip install pyautogui pillow          — سطح المكتب فقط
+playwright>=1.40
+pyautogui>=0.9.54
+pillow>=10.0

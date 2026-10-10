@@ -1,0 +1,19 @@
+[project]
+name = "s_agent"
+version = "1.0.0"
+description = "s_agent — وكيل برمجة عربي سريع وعملي (مثل alphacode)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+browser = ["playwright>=1.40"]
+desktop = ["pyautogui>=0.9.54", "pillow>=10.0"]
+full = ["playwright>=1.40", "pyautogui>=0.9.54", "pillow>=10.0"]
+
+[project.scripts]
+s_agent = "s_agent.cli:main"
+
+[build-system]
+requires = ["setuptools"]
