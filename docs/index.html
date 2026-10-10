@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>s_agent — a fast, hands-on coding agent for your terminal</title>
+<meta name="description" content="s_agent reads your codebase, edits files, runs commands and tests, drives a real browser, controls desktop apps, and verifies its own work."/>
+<link rel="icon" href="logo.svg" type="image/svg+xml"/>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--txt:#e6edf3;--mut:#8b949e;--grn:#3fb950;--cyn:#56d4dd;--acc:linear-gradient(90deg,#3fb950,#56d4dd)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px}
+header.top{display:flex;align-items:center;gap:12px;padding:22px 0}
+header.top img{width:44px;height:44px}
+header.top b{font-size:20px}
+header.top b span{background:var(--acc);-webkit-background-clip:text;background-clip:text;color:transparent}
+nav{margin-left:auto;display:flex;gap:18px}
+nav a{color:var(--mut);text-decoration:none;font-size:15px}
+nav a:hover{color:var(--txt)}
+.hero{text-align:center;padding:64px 0 40px}
+.hero img{width:130px;height:130px}
+.hero h1{font-size:52px;letter-spacing:.5px;margin:18px 0 6px}
+.hero h1 span{background:var(--acc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{color:var(--mut);font-size:19px;max-width:640px;margin:0 auto}
+.badges{margin:22px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.badges span{border:1px solid var(--line);border-radius:20px;padding:3px 13px;font-size:13px;color:var(--mut)}
+.badges b{color:var(--grn)}
+.cta{margin:26px 0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;padding:12px 26px;border-radius:10px;font-weight:600;text-decoration:none;font-size:16px}
+.btn.go{background:var(--acc);color:#04120a}
+.btn.gh{border:1px solid var(--line);color:var(--txt)}
+.term{background:#010409;border:1px solid var(--line);border-radius:12px;padding:18px 20px;font-family:Consolas,Menlo,monospace;font-size:14px;text-align:left;max-width:640px;margin:30px auto 0;overflow-x:auto}
+.term .p{color:var(--grn)} .term .c{color:var(--mut)}
+section{padding:46px 0;border-top:1px solid var(--line)}
+h2{font-size:28px;margin-bottom:6px}
+p.dim{color:var(--mut);margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{font-size:16px;margin-bottom:6px}
+.card h3 i{font-style:normal;margin-right:8px}
+.card p{color:var(--mut);font-size:14px}
+.card code{color:var(--cyn);font-size:13px}
+pre{background:#010409;border:1px solid var(--line);border-radius:12px;padding:18px 20px;overflow-x:auto;font-size:14px}
+pre .k{color:var(--cyn)} pre .s{color:#a5d6ff}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:600} td code{color:var(--cyn)}
+.flow{display:flex;gap:0;flex-wrap:wrap;align-items:stretch;margin-top:8px}
+.flow div{flex:1 1 120px;background:var(--panel);border:1px solid var(--line);padding:12px;text-align:center;font-size:14px}
+.flow div:first-child{border-radius:10px 0 0 10px} .flow div:last-child{border-radius:0 10px 10px 0}
+.flow div b{display:block;color:var(--grn)}
+footer{text-align:center;color:var(--mut);padding:38px 0 46px;font-size:14px;border-top:1px solid var(--line)}
+footer a{color:var(--cyn);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<img src="logo.svg" alt="s_agent logo"/><b>s<span>_agent</span></b>
+<nav><a href="#features">Features</a><a href="#install">Install</a><a href="#usage">Usage</a><a href="https://github.com/salim-studio/s_agent">GitHub</a></nav>
+</header>
+<div class="hero">
+<img src="logo.svg" alt="s_agent logo"/>
+<h1>s<span>_agent</span></h1>
+<p class="sub">A fast, hands-on coding agent for your terminal. It reads your codebase, edits files, runs commands and tests, drives a real browser, controls desktop apps, and verifies its own work.</p>
+<div class="badges"><span>Python <b>3.9+</b></span><span><b>14</b> tools</span><span><b>Offline-ready</b></span><span>Win · Mac · Linux</span><span>MIT</span></div>
+<div class="cta">
+<a class="btn go" href="#install">Get started</a>
+<a class="btn gh" href="https://github.com/salim-studio/s_agent">★ GitHub</a>
+</div>
+<div class="term"><span class="p">s_agent&gt;</span> explain this project<br/><span class="c">✓ ls: 12 items in . &nbsp; ✓ grep: 3 matches for /def main/</span><br/><br/><span class="p">s_agent&gt;</span> open https://example.com and summarize it<br/><span class="c">✓ browser: opened + text extracted (1.2s)</span></div>
+</div>
+<section id="features">
+<h2>Features</h2>
+<p class="dim">Everything a coding agent needs — nothing it doesn't.</p>
+<div class="grid">
+<div class="card"><h3><i>⚡</i>Fast core</h3><p>Pure-stdlib core, zero required dependencies, ~20&nbsp;MB RAM. Independent tool batches run <code>in parallel</code>.</p></div>
+<div class="card"><h3><i>📴</i>Offline-ready</h3><p>Built-in local engine works with <code>no API key</code>. Plug in OpenAI, Gemini, DeepSeek, Ollama &amp; more when you want.</p></div>
+<div class="card"><h3><i>🌐</i>Real browser</h3><p>Playwright, Firefox-first: <code>open · text · click · fill · screenshot</code> on live pages.</p></div>
+<div class="card"><h3><i>🖥️</i>Desktop control</h3><p>PyAutoGUI with FAILSAFE: <code>screenshot · click · type · hotkey · locate</code>.</p></div>
+<div class="card"><h3><i>🐝</i>Swarm mode</h3><p>Split a goal across <code>parallel agents</code> — architecture, bugs, tests, docs — then merge.</p></div>
+<div class="card"><h3><i>🛡️</i>Safe by default</h3><p>Blocked destructive targets, confirmation prompts, <code>/diff</code> review before you trust it.</p></div>
+</div>
+</section>
+<section id="install">
+<h2>Install</h2>
+<p class="dim">Two minutes, Windows / macOS / Linux.</p>
+<pre><span class="k">git clone</span> https://github.com/salim-studio/s_agent.git
+<span class="k">cd</span> s_agent
+pip install -e <span class="s">".[full]"</span>      <span class="c"># core + browser &amp; desktop</span>
+python -m playwright install firefox
+python -m s_agent doctor</pre>
+</section>
+<section id="usage">
+<h2>Usage</h2>
+<p class="dim">Interactive, one-shot, or swarm.</p>
+<pre>python -m s_agent                                   <span class="c"># interactive session</span>
+python -m s_agent run <span class="s">"find the main function"</span> --yes
+python -m s_agent swarm <span class="s">"review this project"</span> --yes
+python -m s_agent browser open --url https://example.com
+python -m s_agent desktop screenshot</pre>
+<br/>
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>run "task"</code></td><td>Run a single task, report with evidence</td></tr>
+<tr><td><code>swarm "goal"</code></td><td>Parallel agents, merged result</td></tr>
+<tr><td><code>browser …</code></td><td>Real-browser automation (status/open/text/click/fill/screenshot/close)</td></tr>
+<tr><td><code>desktop …</code></td><td>Desktop automation (status/screenshot/click/type/hotkey/locate/…)</td></tr>
+<tr><td><code>login · sessions · doctor</code></td><td>Providers, history, health check</td></tr>
+</table>
+</section>
+<section>
+<h2>How it works</h2>
+<p class="dim">A tight loop, every turn.</p>
+<div class="flow"><div><b>Understand</b>project + context</div><div><b>Plan</b>pick actions</div><div><b>Act</b>parallel tools</div><div><b>Verify</b>tests + evidence</div><div><b>Report</b>what changed</div></div>
+</section>
+<footer>© 2026 <a href="https://github.com/salim-studio">salim-slimani</a> · MIT License · <a href="https://github.com/salim-studio/s_agent">salim-studio/s_agent</a></footer>
+</div>
+</body>
+</html>
