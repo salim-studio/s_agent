@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="root">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -10,14 +10,17 @@
 :root{--bg:#0d1117;--panel:#161b22;--line:#30363d;--txt:#e6edf3;--mut:#8b949e;--grn:#3fb950;--cyn:#56d4dd;--acc:linear-gradient(90deg,#3fb950,#56d4dd)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font:16px/1.65 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+[dir="rtl"] body,body.rtl{font-family:-apple-system,"Segoe UI",Tahoma,Arial,sans-serif}
 .wrap{max-width:960px;margin:0 auto;padding:0 22px}
 header.top{display:flex;align-items:center;gap:12px;padding:22px 0}
 header.top img{width:44px;height:44px}
 header.top b{font-size:20px}
 header.top b span{background:var(--acc);-webkit-background-clip:text;background-clip:text;color:transparent}
-nav{margin-left:auto;display:flex;gap:18px}
+nav{margin-left:auto;display:flex;gap:14px;align-items:center}
+[dir="rtl"] nav{margin-left:0;margin-right:auto}
 nav a{color:var(--mut);text-decoration:none;font-size:15px}
 nav a:hover{color:var(--txt)}
+nav select{background:var(--panel);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:14px}
 .hero{text-align:center;padding:64px 0 40px}
 .hero img{width:130px;height:130px}
 .hero h1{font-size:52px;letter-spacing:.5px;margin:18px 0 6px}
@@ -31,6 +34,7 @@ nav a:hover{color:var(--txt)}
 .btn.go{background:var(--acc);color:#04120a}
 .btn.gh{border:1px solid var(--line);color:var(--txt)}
 .term{background:#010409;border:1px solid var(--line);border-radius:12px;padding:18px 20px;font-family:Consolas,Menlo,monospace;font-size:14px;text-align:left;max-width:640px;margin:30px auto 0;overflow-x:auto}
+[dir="rtl"] .term{text-align:left}
 .term .p{color:var(--grn)} .term .c{color:var(--mut)}
 section{padding:46px 0;border-top:1px solid var(--line)}
 h2{font-size:28px;margin-bottom:6px}
@@ -45,6 +49,7 @@ pre{background:#010409;border:1px solid var(--line);border-radius:12px;padding:1
 pre .k{color:var(--cyn)} pre .s{color:#a5d6ff}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+[dir="rtl"] th,[dir="rtl"] td{text-align:right}
 th{color:var(--mut);font-weight:600} td code{color:var(--cyn)}
 .flow{display:flex;gap:0;flex-wrap:wrap;align-items:stretch;margin-top:8px}
 .flow div{flex:1 1 120px;background:var(--panel);border:1px solid var(--line);padding:12px;text-align:center;font-size:14px}
@@ -58,64 +63,74 @@ footer a{color:var(--cyn);text-decoration:none}
 <div class="wrap">
 <header class="top">
 <img src="logo.svg" alt="s_agent logo"/><b>s<span>_agent</span></b>
-<nav><a href="#features">Features</a><a href="#install">Install</a><a href="#usage">Usage</a><a href="https://github.com/salim-studio/s_agent">GitHub</a></nav>
+<nav><a href="#features" data-i18n="nav_f">Features</a><a href="#install" data-i18n="nav_i">Install</a><a href="#usage" data-i18n="nav_u">Usage</a><a href="https://github.com/salim-studio/s_agent">GitHub</a>
+<select id="lang" aria-label="Language"><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option></select></nav>
 </header>
 <div class="hero">
 <img src="logo.svg" alt="s_agent logo"/>
 <h1>s<span>_agent</span></h1>
-<p class="sub">A fast, hands-on coding agent for your terminal. It reads your codebase, edits files, runs commands and tests, drives a real browser, controls desktop apps, and verifies its own work.</p>
-<div class="badges"><span>Python <b>3.9+</b></span><span><b>14</b> tools</span><span><b>Offline-ready</b></span><span>Win · Mac · Linux</span><span>MIT</span></div>
+<p class="sub" data-i18n="hero">A fast, hands-on coding agent for your terminal. It reads your codebase, edits files, runs commands and tests, drives a real browser, controls desktop apps, and verifies its own work.</p>
+<div class="badges"><span>Python <b>3.9+</b></span><span><b>14</b> <span data-i18n="b_tools">tools</span></span><span data-i18n="b_off">Offline-ready</span><span>Win · Mac · Linux</span><span>MIT</span><span data-i18n="b_lang">EN · AR · FR · ES</span></div>
 <div class="cta">
-<a class="btn go" href="#install">Get started</a>
+<a class="btn go" href="#install" data-i18n="cta_go">Get started</a>
 <a class="btn gh" href="https://github.com/salim-studio/s_agent">★ GitHub</a>
 </div>
 <div class="term"><span class="p">s_agent&gt;</span> explain this project<br/><span class="c">✓ ls: 12 items in . &nbsp; ✓ grep: 3 matches for /def main/</span><br/><br/><span class="p">s_agent&gt;</span> open https://example.com and summarize it<br/><span class="c">✓ browser: opened + text extracted (1.2s)</span></div>
 </div>
 <section id="features">
-<h2>Features</h2>
-<p class="dim">Everything a coding agent needs — nothing it doesn't.</p>
+<h2 data-i18n="f_t">Features</h2>
+<p class="dim" data-i18n="f_s">Everything a coding agent needs — nothing it doesn't.</p>
 <div class="grid">
-<div class="card"><h3><i>⚡</i>Fast core</h3><p>Pure-stdlib core, zero required dependencies, ~20&nbsp;MB RAM. Independent tool batches run <code>in parallel</code>.</p></div>
-<div class="card"><h3><i>📴</i>Offline-ready</h3><p>Built-in local engine works with <code>no API key</code>. Plug in OpenAI, Gemini, DeepSeek, Ollama &amp; more when you want.</p></div>
-<div class="card"><h3><i>🌐</i>Real browser</h3><p>Playwright, Firefox-first: <code>open · text · click · fill · screenshot</code> on live pages.</p></div>
-<div class="card"><h3><i>🖥️</i>Desktop control</h3><p>PyAutoGUI with FAILSAFE: <code>screenshot · click · type · hotkey · locate</code>.</p></div>
-<div class="card"><h3><i>🐝</i>Swarm mode</h3><p>Split a goal across <code>parallel agents</code> — architecture, bugs, tests, docs — then merge.</p></div>
-<div class="card"><h3><i>🛡️</i>Safe by default</h3><p>Blocked destructive targets, confirmation prompts, <code>/diff</code> review before you trust it.</p></div>
+<div class="card"><h3><i>⚡</i><span data-i18n="c1t">Fast core</span></h3><p data-i18n="c1x">Pure-stdlib core, zero required dependencies, ~20 MB RAM. Independent tool batches run in parallel.</p></div>
+<div class="card"><h3><i>📴</i><span data-i18n="c2t">Offline-ready</span></h3><p data-i18n="c2x">Built-in local engine works with no API key. Plug in OpenAI, Gemini, DeepSeek, Ollama &amp; more when you want.</p></div>
+<div class="card"><h3><i>🌐</i><span data-i18n="c3t">Real browser</span></h3><p data-i18n="c3x">Playwright, Firefox-first: open · text · click · fill · screenshot on live pages.</p></div>
+<div class="card"><h3><i>🖥️</i><span data-i18n="c4t">Desktop control</span></h3><p data-i18n="c4x">PyAutoGUI with FAILSAFE: screenshot · click · type · hotkey · locate.</p></div>
+<div class="card"><h3><i>🌍</i><span data-i18n="c5t">Multilingual</span></h3><p data-i18n="c5x">English, Arabic, French, Spanish — understands tasks and replies in your language.</p></div>
+<div class="card"><h3><i>🛡️</i><span data-i18n="c6t">Safe by default</span></h3><p data-i18n="c6x">Blocked destructive targets, confirmation prompts, /diff review before you trust it.</p></div>
 </div>
 </section>
 <section id="install">
-<h2>Install</h2>
-<p class="dim">Two minutes, Windows / macOS / Linux.</p>
+<h2 data-i18n="i_t">Install</h2>
+<p class="dim" data-i18n="i_s">Two minutes, Windows / macOS / Linux.</p>
 <pre><span class="k">git clone</span> https://github.com/salim-studio/s_agent.git
 <span class="k">cd</span> s_agent
-pip install -e <span class="s">".[full]"</span>      <span class="c"># core + browser &amp; desktop</span>
+pip install -e <span class="s">".[full]"</span>
 python -m playwright install firefox
-python -m s_agent doctor</pre>
+python -m s_agent doctor
+python -m s_agent lang ar   <span class="c"># or en · fr · es</span></pre>
 </section>
 <section id="usage">
-<h2>Usage</h2>
-<p class="dim">Interactive, one-shot, or swarm.</p>
-<pre>python -m s_agent                                   <span class="c"># interactive session</span>
+<h2 data-i18n="u_t">Usage</h2>
+<p class="dim" data-i18n="u_s">Interactive, one-shot, or swarm.</p>
+<pre>python -m s_agent
 python -m s_agent run <span class="s">"find the main function"</span> --yes
 python -m s_agent swarm <span class="s">"review this project"</span> --yes
 python -m s_agent browser open --url https://example.com
 python -m s_agent desktop screenshot</pre>
 <br/>
 <table>
-<tr><th>Command</th><th>What it does</th></tr>
-<tr><td><code>run "task"</code></td><td>Run a single task, report with evidence</td></tr>
-<tr><td><code>swarm "goal"</code></td><td>Parallel agents, merged result</td></tr>
-<tr><td><code>browser …</code></td><td>Real-browser automation (status/open/text/click/fill/screenshot/close)</td></tr>
-<tr><td><code>desktop …</code></td><td>Desktop automation (status/screenshot/click/type/hotkey/locate/…)</td></tr>
-<tr><td><code>login · sessions · doctor</code></td><td>Providers, history, health check</td></tr>
+<tr><th data-i18n="th1">Command</th><th data-i18n="th2">What it does</th></tr>
+<tr><td><code>run "task"</code></td><td data-i18n="r1">Run a single task, report with evidence</td></tr>
+<tr><td><code>swarm "goal"</code></td><td data-i18n="r2">Parallel agents, merged result</td></tr>
+<tr><td><code>browser …</code></td><td data-i18n="r3">Real-browser automation</td></tr>
+<tr><td><code>desktop …</code></td><td data-i18n="r4">Desktop automation</td></tr>
+<tr><td><code>lang · login · doctor</code></td><td data-i18n="r5">Language, providers, health check</td></tr>
 </table>
 </section>
 <section>
-<h2>How it works</h2>
-<p class="dim">A tight loop, every turn.</p>
-<div class="flow"><div><b>Understand</b>project + context</div><div><b>Plan</b>pick actions</div><div><b>Act</b>parallel tools</div><div><b>Verify</b>tests + evidence</div><div><b>Report</b>what changed</div></div>
+<h2 data-i18n="h_t">How it works</h2>
+<p class="dim" data-i18n="h_s">A tight loop, every turn.</p>
+<div class="flow"><div><b data-i18n="s1">Understand</b><span data-i18n="s1x">project + context</span></div><div><b data-i18n="s2">Plan</b><span data-i18n="s2x">pick actions</span></div><div><b data-i18n="s3">Act</b><span data-i18n="s3x">parallel tools</span></div><div><b data-i18n="s4">Verify</b><span data-i18n="s4x">tests + evidence</span></div><div><b data-i18n="s5">Report</b><span data-i18n="s5x">what changed</span></div></div>
 </section>
-<footer>© 2026 <a href="https://github.com/salim-studio">salim-slimani</a> · MIT License · <a href="https://github.com/salim-studio/s_agent">salim-studio/s_agent</a></footer>
+<footer><span data-i18n="foot">© 2026 salim-slimani · MIT License ·</span> <a href="https://github.com/salim-studio/s_agent">salim-studio/s_agent</a></footer>
 </div>
+<script>
+var I18N={
+ar:{nav_f:"المزايا",nav_i:"التثبيت",nav_u:"الاستخدام",hero:"وكيل برمجة سريع وعملي لطرفيتك. يقرأ قاعدة الكود، يحرر الملفات، ينفذ الأوامر والاختبارات، يقود متصفحًا حقيقيًا، يتحكم بتطبيقات سطح المكتب، ويتحقق من عمله.",b_tools:"أداة",b_off:"يعمل دون إنترنت",b_lang:"عربي · إنجليزي · فرنسي · إسباني",cta_go:"ابدأ الآن",f_t:"المزايا",f_s:"كل ما يحتاجه وكيل البرمجة — ولا شيء زائد.",c1t:"نواة سريعة",c1x:"نواة stdlib خالصة، صفر اعتماديات إجبارية، ~20MB ذاكرة. دفعات الأدوات تعمل بالتوازي.",c2t:"يعمل دون إنترنت",c2x:"محرك محلي مدمج يعمل بلا مفتاح API. اربط OpenAI أو Gemini أو Ollama متى شئت.",c3t:"متصفح حقيقي",c3x:"عبر Playwright (فايرفوكس أولًا): فتح · نص · نقر · تعبئة · لقطات للصفحات الحية.",c4t:"تحكم سطح المكتب",c4x:"عبر PyAutoGUI مع FAILSAFE: لقطة · نقر · كتابة · اختصارات · تحديد.",c5t:"متعدد اللغات",c5x:"إنجليزية وعربية وفرنسية وإسبانية — يفهم المهام ويرد بلغتك.",c6t:"آمن افتراضيًا",c6x:"حظر الأهداف المدمرة، طلبات تأكيد، ومراجعة /diff قبل الثقة.",i_t:"التثبيت",i_s:"دقيقتان على ويندوز / ماك / لينكس.",u_t:"الاستخدام",u_s:"تفاعلي، أو مهمة واحدة، أو سرب.",th1:"الأمر",th2:"ماذا يفعل",r1:"تنفيذ مهمة واحدة مع تقرير بالأدلة",r2:"وكلاء متوازيون ونتيجة مدمجة",r3:"أتمتة متصفح حقيقي",r4:"أتمتة سطح المكتب",r5:"اللغة والمزودون وفحص السلامة",h_t:"كيف يعمل",h_s:"حلقة محكمة في كل دور.",s1:"افهم",s1x:"المشروع والسياق",s2:"خطط",s2x:"اختر الإجراءات",s3:"نفّذ",s3x:"أدوات متوازية",s4:"تحقق",s4x:"اختبارات وأدلة",s5:"قرّر",s5x:"ما تغيّر",foot:"© 2026 salim-slimani · رخصة MIT ·"},
+fr:{nav_f:"Fonctionnalités",nav_i:"Installation",nav_u:"Usage",hero:"Un agent de code rapide et pragmatique pour votre terminal. Il lit votre code, modifie les fichiers, exécute commandes et tests, pilote un vrai navigateur, contrôle les applis de bureau, et vérifie son travail.",b_tools:"outils",b_off:"Hors-ligne",b_lang:"EN · AR · FR · ES",cta_go:"Commencer",f_t:"Fonctionnalités",f_s:"Tout ce qu'il faut à un agent de code — rien de plus.",c1t:"Cœur rapide",c1x:"Cœur stdlib pur, zéro dépendance requise, ~20 Mo RAM. Les lots d'outils tournent en parallèle.",c2t:"Hors-ligne",c2x:"Moteur local intégré sans clé API. Branchez OpenAI, Gemini, Ollama quand vous voulez.",c3t:"Vrai navigateur",c3x:"Via Playwright (Firefox d'abord) : ouvrir · texte · clic · saisie · captures.",c4t:"Contrôle du bureau",c4x:"Via PyAutoGUI avec FAILSAFE : capture · clic · frappe · raccourcis · repérage.",c5t:"Multilingue",c5x:"Anglais, arabe, français, espagnol — comprend et répond dans votre langue.",c6t:"Sûr par défaut",c6x:"Cibles destructrices bloquées, confirmations, relecture /diff avant confiance.",i_t:"Installation",i_s:"Deux minutes, Windows / macOS / Linux.",u_t:"Usage",u_s:"Interactif, one-shot, ou essaim.",th1:"Commande",th2:"Rôle",r1:"Une tâche, rapport avec preuves",r2:"Agents parallèles, résultat fusionné",r3:"Automatisation du vrai navigateur",r4:"Automatisation du bureau",r5:"Langue, fournisseurs, diagnostic",h_t:"Comment ça marche",h_s:"Une boucle stricte, à chaque tour.",s1:"Comprendre",s1x:"projet + contexte",s2:"Planifier",s2x:"choisir les actions",s3:"Agir",s3x:"outils parallèles",s4:"Vérifier",s4x:"tests + preuves",s5:"Rapporter",s5x:"ce qui a changé",foot:"© 2026 salim-slimani · Licence MIT ·"}};
+function setLang(l){var d=I18N[l]||{};document.querySelectorAll("[data-i18n]").forEach(function(el){var k=el.getAttribute("data-i18n");if(d[k])el.textContent=d[k];});var root=document.getElementById("root");if(l==="ar"){root.setAttribute("dir","rtl");root.setAttribute("lang","ar");document.body.classList.add("rtl");}else{root.setAttribute("dir","ltr");root.setAttribute("lang",l);document.body.classList.remove("rtl");}try{localStorage.setItem("s_agent_lang",l);}catch(e){}var sel=document.getElementById("lang");if(sel)sel.value=l;}
+document.getElementById("lang").addEventListener("change",function(e){setLang(e.target.value);});
+(function(){var l="en";try{l=localStorage.getItem("s_agent_lang")||"en";}catch(e){}if(!I18N[l])l="en";setLang(l);})();
+</script>
 </body>
 </html>

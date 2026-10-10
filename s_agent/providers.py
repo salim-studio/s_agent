@@ -2,12 +2,13 @@
 from __future__ import annotations
 import json, urllib.request
 from .config import SConfig
+from .i18n import t, cur, LANGS
 
-SYSTEM = ('You are s_agent: a practical coding agent. '
-  'Answer with a short plan, then act with tools. A tool call is one JSON line, e.g. '
-  '{"tool":"read","args":{"path":"."}} — one or more calls, each on its own block. '
-  'Tools: read,write,edit,ls,grep,bash,todo,memory,webfetch,websearch,patch,diff,browser,desktop. '
-  'Understand -> plan -> execute -> verify -> report. Reply in English.')
+def system_prompt() -> str:
+    lang_name = LANGS.get(cur(), "English")
+    return t("sys", lang=lang_name)
+
+SYSTEM = ""  # kept for backward-compat; use system_prompt() instead
 
 def chat_openai_compat(cfg: SConfig, messages: list, timeout: int = 60) -> str:
     url = cfg.endpoint()
@@ -84,9 +85,9 @@ def local_plan(task: str, cwd: str) -> list:
     ]
 
 def local_summarize(task: str, observations: list) -> str:
-    out = [f"## Understood\nTask: {task}", "\n## Done"]
+    out = [t("r_understood") + "\n" + t("r_task", task=task), "\n" + t("r_done")]
     for o in observations[-8:]:
         out.append(f"- [{o.get('tool')}] {str(o.get('ok'))} — {str(o.get('summary',''))[:220]}")
-    out += ["\n## Verified\n- Tool outputs above were reviewed.",
-            "\n## Remaining\n- Name a precise next step (e.g. a file path) and I will run it right away."]
+    out += ["\n" + t("r_verified") + "\n" + t("r_verified1"),
+            "\n" + t("r_remaining") + "\n" + t("r_remaining1")]
     return "\n".join(out)

@@ -4,7 +4,8 @@ import json, re, os
 from dataclasses import dataclass
 from .config import SConfig
 from . import tools
-from .providers import SYSTEM, chat_openai_compat, local_plan, local_summarize
+from .providers import system_prompt, chat_openai_compat, local_plan, local_summarize
+from .i18n import t
 
 TOOL_RE = re.compile(r"```tool:\s*(\{.*?\})\s*```", re.S)
 
@@ -43,7 +44,7 @@ class Agent:
         self.history = []
 
     def _llm(self, task: str, obs_text: str) -> str:
-        msgs = [{"role": "system", "content": SYSTEM + "\nTools:\n" + tools.describe_tools()},
+        msgs = [{"role": "system", "content": system_prompt() + "\nTools:\n" + tools.describe_tools()},
                 {"role": "user", "content": f"Task: {task}\nObservations so far:\n{obs_text[-3000:]}\nExecute the next step with tools."}]
         try:
             if self.cfg.provider == "local" or not self.cfg.endpoint():
@@ -68,10 +69,10 @@ class Agent:
             # Safe-mode confirmation for writing/executing
             allowed = []
             for c in batch:
-                t, a = c.get("tool",""), c.get("args",{})
-                if t in ("write", "edit", "patch", "bash", "browser", "desktop") and self.cfg.safe_mode:
-                    if not self.confirm_fn(f"Run {t} {str(a)[:100]}? [y/N] "):
-                        obs.append({"tool": t, "ok": False, "summary": "Rejected by user"})
+                tool, args = c.get("tool",""), c.get("args",{})
+                if tool in ("write", "edit", "patch", "bash", "browser", "desktop") and self.cfg.safe_mode:
+                    if not self.confirm_fn(t("cf_confirm", tool=tool, args=str(args)[:100])):
+                        obs.append({"tool": tool, "ok": False, "summary": t("cf_rejected")})
                         continue
                 allowed.append(c)
             if not allowed: continue

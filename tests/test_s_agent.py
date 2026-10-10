@@ -2,7 +2,8 @@
 import os, tempfile
 from s_agent import tools
 from s_agent.agent import parse_tool_calls
-from s_agent.providers import local_plan
+from s_agent.providers import local_plan, local_summarize
+from s_agent.i18n import t, set_lang, LANGS
 
 def test_tools_roundtrip():
     d = tempfile.mkdtemp()
@@ -37,3 +38,20 @@ def test_browser_desktop_registered_and_safe():
     # desktop refuses clicks without coordinates (safety) — installed or not
     rc = tools.run_tool("desktop", {"action": "click"})
     assert rc["ok"] is False
+
+def test_i18n_covers_all_languages():
+    assert set(LANGS) == {"en", "ar", "fr", "es"}
+    try:
+        set_lang("fr")
+        assert "élément" in tools.t_ls(".")["summary"]
+        assert "Compris" in local_summarize("x", [])
+        set_lang("ar")
+        assert "عنصر" in tools.t_ls(".")["summary"] or "عنصرًا" in tools.t_ls(".")["summary"]
+        assert "ما تم فهمه" in local_summarize("x", [])
+        set_lang("es")
+        assert "elemento" in tools.t_ls(".")["summary"]
+        set_lang("xx")  # unknown -> English fallback
+        assert "items in" in tools.t_ls(".")["summary"]
+        assert t("no_such_key") == "no_such_key"
+    finally:
+        set_lang("en")

@@ -96,6 +96,18 @@ python -m s_agent desktop click --x 500 --y 300
 
 > Without these extras everything else still works (12 stdlib tools) — `doctor` tells you what is missing instead of crashing.
 
+## Languages
+
+s_agent speaks **English, Arabic, French, and Spanish** — for both input and output. Tasks in any of them are understood; replies follow your UI language.
+
+```bash
+python -m s_agent lang        # show current language
+python -m s_agent lang ar     # switch to Arabic (also: en, fr, es)
+python -m s_agent lang fr     # Français
+python -m s_agent --lang es run "lista el directorio" --yes
+# In-session: /lang ar
+```
+
 ## Safety
 
 - Destructive filesystem/device targets are blocked.
