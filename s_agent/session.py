@@ -1,4 +1,4 @@
-"""الجلسات المستمرة — JSONL خفيف وسريع."""
+"""Persistent sessions — lightweight, fast JSONL."""
 from __future__ import annotations
 import json, os, time, uuid
 from .config import sessions_dir

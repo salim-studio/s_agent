@@ -1,4 +1,4 @@
-"""الإعدادات والموفّرون — سريع وخفيف (JSON فقط)."""
+"""Settings and providers — fast and lightweight (JSON only)."""
 from __future__ import annotations
 import json, os
 from dataclasses import dataclass, field, asdict
@@ -7,9 +7,9 @@ APP = "s_agent"
 
 PROVIDERS = {
     "local":   {"base_url": "", "model": "local-heuristic", "needs_key": False,
-                "note": "يعمل بدون إنترنت/مفتاح — محرك محلي سريع"},
+                "note": "Works offline with no API key — fast local engine"},
     "openai":  {"base_url": "https://api.openai.com/v1", "model": "gpt-4o-mini", "needs_key": True, "env": "OPENAI_API_KEY"},
-    "anthropic": {"base_url": "https://api.anthropic.com/v1", "model": "", "needs_key": True, "env": "ANTHROPIC_API_KEY", "note": "يتطلب محوّل OpenAI-compat وسيط"},
+    "anthropic": {"base_url": "https://api.anthropic.com/v1", "model": "", "needs_key": True, "env": "ANTHROPIC_API_KEY", "note": "Requires an OpenAI-compatible gateway"},
     "gemini":  {"base_url": "https://generativelanguage.googleapis.com/v1beta/openai", "model": "gemini-2.0-flash", "needs_key": True, "env": "GEMINI_API_KEY"},
     "deepseek": {"base_url": "https://api.deepseek.com/v1", "model": "deepseek-chat", "needs_key": True, "env": "DEEPSEEK_API_KEY"},
     "openrouter": {"base_url": "https://openrouter.ai/api/v1", "model": "openrouter/auto", "needs_key": True, "env": "OPENROUTER_API_KEY"},
@@ -24,7 +24,7 @@ class SConfig:
     model: str = "local-heuristic"
     api_key: str = ""
     base_url: str = ""
-    language: str = "ar"
+    language: str = "en"
     safe_mode: bool = True
     max_steps: int = 12
     timeout: int = 60

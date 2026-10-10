@@ -1,4 +1,4 @@
-"""حلقة الوكيل: فهم → تخطيط → تنفيذ (متوازٍ) → تحقق → تقرير."""
+"""Agent loop: understand -> plan -> execute (parallel) -> verify -> report."""
 from __future__ import annotations
 import json, re, os
 from dataclasses import dataclass
@@ -15,14 +15,14 @@ def parse_tool_calls(text: str) -> list:
             d = json.loads(m.group(1))
             if "tool" in d: calls.append(d)
         except Exception: pass
-    # سطر JSON مفرد احتياطي
+    # Fallback: single JSON lines
     for ln in (text or "").splitlines():
         ln = ln.strip()
         if ln.startswith('{"tool"'):
             try:
                 d = json.loads(ln); calls.append(d)
             except Exception: pass
-    # إزالة التكرار
+    # Deduplicate
     seen, uniq = set(), []
     for c in calls:
         k = json.dumps(c, sort_keys=True, ensure_ascii=False)
@@ -43,19 +43,19 @@ class Agent:
         self.history = []
 
     def _llm(self, task: str, obs_text: str) -> str:
-        msgs = [{"role": "system", "content": SYSTEM + "\nالأدوات:\n" + tools.describe_tools()},
-                {"role": "user", "content": f"المهمة: {task}\nالملاحظات حتى الآن:\n{obs_text[-3000:]}\nنفّذ الخطوة التالية بالأدوات."}]
+        msgs = [{"role": "system", "content": SYSTEM + "\nTools:\n" + tools.describe_tools()},
+                {"role": "user", "content": f"Task: {task}\nObservations so far:\n{obs_text[-3000:]}\nExecute the next step with tools."}]
         try:
             if self.cfg.provider == "local" or not self.cfg.endpoint():
                 raise RuntimeError("local")
             return chat_openai_compat(self.cfg, msgs, timeout=self.cfg.timeout)
         except Exception:
-            return ""  # سيقع على المخطط المحلي
+            return ""  # falls back to the local planner
 
     def run(self, task: str, verbose: bool = True) -> AgentResult:
         obs, steps = [], 0
         plan = local_plan(task, self.cwd)
-        # إن توفر LLM ندمجه، وإلا نعتمد المحلي (أسرع وبلا شبكة)
+        # Merge LLM output when available, otherwise rely on local (faster, offline)
         llm_text = self._llm(task, "")
         llm_calls = parse_tool_calls(llm_text)
         queue = (llm_calls or []) + plan
@@ -64,14 +64,14 @@ class Agent:
 
         for _ in range(self.cfg.max_steps):
             if not queue: break
-            batch, queue = queue[:4], queue[4:]  # دفعات متوازية = سرعة
-            # تأكيد الوضع الآمن للكتابة/التنفيذ
+            batch, queue = queue[:4], queue[4:]  # parallel batches = speed
+            # Safe-mode confirmation for writing/executing
             allowed = []
             for c in batch:
                 t, a = c.get("tool",""), c.get("args",{})
                 if t in ("write", "edit", "patch", "bash", "browser", "desktop") and self.cfg.safe_mode:
-                    if not self.confirm_fn(f"تنفيذ {t} {str(a)[:100]}؟ [y/N] "):
-                        obs.append({"tool": t, "ok": False, "summary": "رفضه المستخدم"})
+                    if not self.confirm_fn(f"Run {t} {str(a)[:100]}? [y/N] "):
+                        obs.append({"tool": t, "ok": False, "summary": "Rejected by user"})
                         continue
                 allowed.append(c)
             if not allowed: continue
@@ -81,7 +81,7 @@ class Agent:
                 for r in results:
                     mark = "✓" if r.get("ok") else "✗"
                     print(f"  {mark} {r.get('tool')}: {r.get('summary','')} {str(r.get('error',''))[:120]}")
-            # متابعة: إن كان LLM متاحًا اطلب الخطوة التالية
+            # Follow-up: ask the LLM for the next step when available
             if self.cfg.provider != "local" and self.cfg.endpoint():
                 txt = "\n".join(f"[{r.get('tool')}] ok={r.get('ok')} {str(r.get('summary',r.get('error','')))[:300]}" for r in results)
                 nxt = self._llm(task, "\n".join(o.get("tool","")+str(o.get("summary","")) for o in obs))
@@ -90,9 +90,9 @@ class Agent:
                 if verbose and nxt: print(nxt[:800])
                 if not nc and not queue: break
             else:
-                # محلي: بعد الاستكشاف الأول نلخص مباشرة (خطوتان كحد عملي للسرعة)
+                # Local: summarize right after the first exploration (2 steps max for speed)
                 if steps >= 2: break
         summary = local_summarize(task, obs)
         if self.cfg.provider != "local" and self.cfg.endpoint() and llm_text:
-            summary = summary  # يُبقي التقرير المهيكل الموحد
+            summary = summary  # keep the unified structured report
         return AgentResult(text=summary, observations=obs, steps=steps)

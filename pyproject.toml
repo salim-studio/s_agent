@@ -1,19 +1,32 @@
 [project]
 name = "s_agent"
-version = "1.0.0"
-description = "s_agent — وكيل برمجة عربي سريع وعملي (مثل alphacode)"
+version = "1.1.0"
+description = "s_agent — a fast, hands-on coding agent for your terminal"
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "MIT" }
+license = { file = "LICENSE" }
+authors = [{ name = "salim-slimani" }]
+keywords = ["ai-agent", "coding-agent", "cli", "automation", "playwright", "pyautogui"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Environment :: Console",
+  "Topic :: Software Development",
+]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/salim-studio/s_agent"
+Repository = "https://github.com/salim-studio/s_agent"
+Issues = "https://github.com/salim-studio/s_agent/issues"
+
+[project.scripts]
+s_agent = "s_agent.cli:main"
 
 [project.optional-dependencies]
 browser = ["playwright>=1.40"]
 desktop = ["pyautogui>=0.9.54", "pillow>=10.0"]
 full = ["playwright>=1.40", "pyautogui>=0.9.54", "pillow>=10.0"]
-
-[project.scripts]
-s_agent = "s_agent.cli:main"
 
 [build-system]
 requires = ["setuptools"]

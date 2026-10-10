@@ -1,6 +1,6 @@
-"""s_agent — وكيل برمجة طرفي سريع، عملي، متكامل (stdlib فقط)."""
+"""s_agent — a fast, hands-on coding agent for your terminal (stdlib core)."""
 from .agent import Agent, AgentResult
 from .config import load_config, SConfig
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __all__ = ["Agent", "AgentResult", "load_config", "SConfig"]

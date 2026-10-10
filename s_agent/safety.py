@@ -1,4 +1,4 @@
-"""حواجز الأمان: منع المسارات المدمرة والأوامر الخطرة + تأكيد التفاعلي."""
+"""Safety guardrails: block destructive paths/commands + interactive confirmation."""
 from __future__ import annotations
 import os, re
 
@@ -28,9 +28,9 @@ def is_cmd_risky(cmd: str) -> bool:
     return bool(RISKY_CMD.search(cmd or ""))
 
 def need_confirm(tool: str, args: dict, safe_mode: bool) -> str:
-    """يرجع سبب طلب التأكيد أو ''."""
+    """Return the reason confirmation is required, or ''."""
     if not safe_mode:
         return ""
     if tool in ("write", "edit", "multiedit", "patch", "bash"):
-        return "كتابة/تنفيذ يتطلب تأكيدًا (الوضع الآمن)"
+        return "Writing/executing requires confirmation (safe mode)"
     return ""
